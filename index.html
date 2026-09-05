@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>El Corcho - UVigo Ourense</title>
+    <link rel="stylesheet" href="index.css">
+    
+</head>
+<body>
+
+    <!-- Tablero gigante -->
+    <div class="lienzo-corcho" id="corcho">
+
+        <!-- Títulos de las zonas -->
+        <div class="zona-titulo" style="top: 200px; left: 500px;">📌 EDIFICIO POLITÉCNICO</div>
+        <div class="zona-titulo" style="top: 2000px; left: 2500px;">☕ CAFETERÍA CENTRAL</div>
+        <div class="zona-titulo" style="top: 4000px; left: 1000px;">📚 CAMPUS DA AGUA</div>
+
+        <!-- Notas de ejemplo -->
+        <div class="post-it" style="top: 400px; left: 600px; background-color: #ffccff;">
+            <p>¿Alguien de primero de Ingeniería Informática para crear grupo de estudio de Álgebra? 😭</p>
+            <span class="autor">@mateo_ou</span>
+        </div>
+
+        <div class="post-it" style="top: 450px; left: 950px; background-color: #ccffff;">
+            <p>Se busca quinto jugador para equipo de Fútbol Sala del Campus. Solemos jugar los martes.</p>
+            <span class="autor">@uvigo_fc</span>
+        </div>
+
+        <div class="post-it" style="top: 2100px; left: 2600px;">
+            <p>Alguien se dejó una chaqueta vaquera en los sofás de la biblioteca. ¡La dejé en conserjería!</p>
+            <span class="autor">Anónimo</span>
+        </div>
+
+        <!-- CHINCHETA CENTRAL DEL CAMPUS -->
+        <div class="marca-central" title="Centro del Campus">❓</div>
+
+    </div>
+
+    <!-- Interfaz de Botones Flotantes (Solo uno de cada uno y ordenados) -->
+    <button id="btn-crear" class="boton-flotante" style="bottom: 105px;" title="Poner una nota">📝</button>
+    <button id="btn-centro" class="boton-flotante" style="bottom: 30px;" title="Volver al centro">📍</button>
+
+    <!-- Conectamos el archivo de funciones abajo para que lea bien los botones -->
+    <script src="index.js"></script>
+</body>
+</html>
