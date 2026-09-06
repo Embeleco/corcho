@@ -175,5 +175,110 @@
     
             pointer-events: none; /* Importante: El ratón atraviesa esta capa para que te deje arrastrar y clicar botones */
             z-index: 999; /* Se sitúa por encima del corcho */
+        }
+
+/* ==========================================
+   💬 ESTILOS DEL CHAT GENERAL Y HEADER
+   ========================================== */
+
+/* Barra Superior Fija */
+.header-campus {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 60px;
+    background-color: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(5px);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    z-index: 500;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+}
+.header-logo {
+    font-weight: bold;
+    font-size: 20px;
+    color: #333;
+}
+.btn-chat-toggle {
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.btn-chat-toggle:hover { background-color: #c0392b; }
+
+/* Contenedor del Chat Flotante Derecho */
+.chat-contenedor {
+    position: fixed;
+    top: 75px;
+    right: 20px;
+    width: 320px;
+    height: calc(100vh - 110px);
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+.chat-contenedor.cerrado {
+    transform: translateX(360px);
+    opacity: 0;
+    pointer-events: none;
+}
+.chat-header {
+    background-color: #34495e;
+    color: white;
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.chat-header button {
+    background: none; border: none; color: white; font-size: 16px; cursor: pointer;
 }
 
+/* Zona de mensajes */
+.chat-mensajes {
+    flex: 1;
+    padding: 15px;
+    overflow-y: auto;
+    background-color: #f8f9fa;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.msg-burbuja {
+    background-color: #e1ffeb;
+    padding: 8px 12px;
+    border-radius: 8px;
+    max-width: 85%;
+    align-self: flex-start;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+.msg-burbuja strong { display: block; font-size: 11px; color: #2ecc71; margin-bottom: 2px; }
+.msg-burbuja p { font-size: 14px; color: #333; margin: 0; user-select: text; -webkit-user-select: text;}
+
+/* Input inferior */
+.chat-input-area {
+    padding: 10px;
+    border-top: 1px solid #eee;
+    display: flex;
+    gap: 8px;
+    background: white;
+}
+.chat-input-area input {
+    flex: 1; padding: 8px 12px; border: 1px solid #ddd; border-radius: 20px; outline: none;
+}
+.chat-input-area button {
+    background-color: #2ecc71; border: none; color: white; width: 36px; height: 36px; border-radius: 50%; cursor: pointer;
+}
