@@ -11,169 +11,141 @@
             user-select: none;         /* Estándar */
         }
 
-
-        /* 2. La ventana del navegador */
-        body {
-            width: 100vw;
-            height: 100vh;
-            overflow: auto; 
-            background-color: #333; 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            
-            /* Evita tirones de scroll elástico en portátiles/móviles */
-            overscroll-behavior: none; 
-
-            /* TRUCO PARA OCULTAR LAS BARRAS DE SCROLL */
-            scrollbar-width: none; /* Oculta en Firefox */
-            -ms-overflow-style: none;  /* Oculta en Internet Explorer y Edge antiguo */
-        }
-
-        /* Oculta las barras en Chrome, Safari y Opera */
-        body::-webkit-scrollbar {
-            display: none;
-        }
-
-
-        /* 3. EL LIENZO GIGANTE (El corcho) */
-        /* .lienzo-corcho {
-            width: 5000px;  
-            height: 5000px; 
-            background-image: url('tu-imagen-de-corcho.jpg'); 
-            background-repeat: repeat;
-            background-size: 500px; 
-            position: relative; */
-            
-            /* Evita que el navegador intente "arrastrar" la imagen de fondo */
-            -webkit-user-drag: none;
-        }
-
-        /* 4. DISEÑO DE LAS NOTAS POST-IT */
-        .post-it {
-            position: absolute;
-            width: 250px;
-            padding: 20px;
-            background-color: #fef5c1;
-            box-shadow: 5px 5px 15px rgba(0,0,0,0.2);
-            border-bottom-right-radius: 20px 5px;
-            transform: rotate(-1deg);
-            transition: transform 0.2s;
-            cursor: pointer;
-        }
-
-        /* Permitimos seleccionar el texto DENTRO del post-it por si quieren copiar un @ de IG */
-        .post-it p, .post-it .autor {
-            user-select: text;
-            -webkit-user-select: text;
-        }
-
-        .post-it:hover {
-            transform: scale(1.05) rotate(1deg);
-            z-index: 10;
-        }
-
-        .post-it p {
-            font-size: 16px;
-            color: #333;
-            line-height: 1.4;
-        }
-
-        .post-it .autor {
-            display: block;
-            margin-top: 15px;
-            font-size: 12px;
-            color: #777;
-            text-align: right;
-            font-weight: bold;
-        }
-
-        /* Títulos de las zonas */
-        .zona-titulo {
-            position: absolute;
-            font-size: 42px;
-            color: rgba(255, 255, 255, 0.6);
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-            font-weight: 900;
-            pointer-events: none; /* Hace que el ratón "atraviese" el título sin atascarse */
-        }
-
-        /* 5. BOTÓN FLOTANTE FIJO EN PANTALLA */
-        .boton-flotante {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            width: 60px;
-            height: 60px;
-            background-color: #ffffff;
-            border: none;
-            border-radius: 50%;
-            font-size: 24px;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
-            cursor: pointer;
-            z-index: 1000; 
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: transform 0.2s, background-color 0.2s;
-        }
-
-        .boton-flotante:hover {
-            transform: scale(1.1);
-            background-color: #f0f0f0;
-        }
-
-        .boton-flotante:active {
-            transform: scale(0.95);
-        }
-                /* 8. MARCA DE LA CHINCHETA CENTRAL */
-        .marca-central {
-            position: absolute;
-            /* Lo movemos al centro exacto (2500px) del corcho de 5000x5000 */
-            top: 2500px;
-            left: 2500px;
-            
-            /* Restamos la mitad del tamaño del círculo para que el centro sea exacto */
-            transform: translate(-50%, -50%);
-            
-            width: 100px;
-            height: 100px;
-            background-color: rgba(231, 77, 60, 0.389); /* Rojo intenso con un toque de transparencia */
-            border: 4px solid #ffffff; /* Borde blanco para que resalte sobre el corcho */
-            border-radius: 50%; /* Lo hace un círculo perfecto */
-            
-            font-size: 50px; /* Tamaño del emoji gigante */
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0px 8px 20px rgba(0,0,0,0.4);
-            
-            pointer-events: none; /* El ratón lo atraviesa para que no moleste al arrastrar */
-            z-index: 5; /* Queda por encima del fondo pero por debajo de los post-its si le caen encima */
-        }
-        .lienzo-corcho {
-            width: 5000px;  
-            height: 5000px; 
-    
-    /* PONE AQUÍ EL NOMBRE EXACTO DE TU IMAGEN */
-            background-image: url('fondo.png'); 
-            /* background-size: 100% 100%;  */
-    
-    /* Ajusta este número (en píxeles) para hacer el dibujo del corcho más grande o más pequeño */ 
-            
-            position: relative;
-            -webkit-user-drag: none;
-        }
-        /* CAPA DE SOMBREADO FIJO EN LAS ESQUINAS */
-        body::after {
-            content: "";
-            position: fixed; /* Se queda clavado en la pantalla aunque te muevas */
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-    
-    /* Creamos un degradado radial: transparente en el centro y oscuro en los bordes */
-            background: radial-gradient(circle, rgba(0,0,0,0) 40%, rgba(0,0,0,0.7) 100%);
-    
-            pointer-events: none; /* Importante: El ratón atraviesa esta capa para que te deje arrastrar y clicar botones */
-            z-index: 999; /* Se sitúa por encima del corcho */
+/* 2. LA VENTANA DEL NAVEGADOR */
+body {
+    width: 100vw;
+    height: 100vh;
+    overflow: auto; 
+    background-color: #333; 
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    overscroll-behavior: none; 
+    scrollbar-width: none; /* Oculta en Firefox */
+    -ms-overflow-style: none;  /* Oculta en Edge antiguo */
 }
+
+/* Oculta las barras en Chrome, Safari y Opera */
+body::-webkit-scrollbar {
+    display: none;
+}
+
+/* 3. EL LIENZO GIGANTE (El corcho unificado) */
+.lienzo-corcho {
+    width: 5000px;  
+    height: 5000px; 
+    background-image: url('fondo.png'); /* Asegúrate de que en GitHub el archivo se llame exactamente fondo.png */
+    background-size: 100% 100%; /* Se estira por completo para evitar cortes oscuros */
+    background-repeat: no-repeat;
+    position: relative;
+    -webkit-user-drag: none;
+}
+
+/* 4. DISEÑO DE LAS NOTAS POST-IT */
+.post-it {
+    position: absolute;
+    width: 250px;
+    padding: 20px;
+    background-color: #fef5c1;
+    box-shadow: 5px 5px 15px rgba(0,0,0,0.2);
+    border-bottom-right-radius: 20px 5px;
+    transform: rotate(-1deg);
+    transition: transform 0.2s;
+    cursor: pointer;
+    z-index: 10;
+}
+
+.post-it p, .post-it .autor {
+    user-select: text;
+    -webkit-user-select: text;
+}
+
+.post-it:hover {
+    transform: scale(1.05) rotate(1deg);
+    z-index: 20;
+}
+
+.post-it p {
+    font-size: 16px;
+    color: #333;
+    line-height: 1.4;
+}
+
+.post-it .autor {
+    display: block;
+    margin-top: 15px;
+    font-size: 12px;
+    color: #777;
+    text-align: right;
+    font-weight: bold;
+}
+
+/* Títulos de las zonas */
+.zona-titulo {
+    position: absolute;
+    font-size: 42px;
+    color: rgba(255, 255, 255, 0.6);
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    font-weight: 900;
+    pointer-events: none;
+}
+
+/* 5. BOTÓN FLOTANTE FIJO EN PANTALLA */
+.boton-flotante {
+    position: fixed;
+    right: 30px;
+    width: 60px;
+    height: 60px;
+    background-color: #ffffff;
+    border: none;
+    border-radius: 50%;
+    font-size: 24px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+    z-index: 1000; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s, background-color 0.2s;
+}
+
+.boton-flotante:hover {
+    transform: scale(1.1);
+    background-color: #f0f0f0;
+}
+
+.boton-flotante:active {
+    transform: scale(0.95);
+}
+
+/* 6. MARCA DE LA CHINCHETA CENTRAL */
+.marca-central {
+    position: absolute;
+    top: 2500px;
+    left: 2500px;
+    transform: translate(-50%, -50%);
+    width: 100px;
+    height: 100px;
+    background-color: rgba(231, 77, 60, 0.389); 
+    border: 4px solid #ffffff; 
+    border-radius: 50%; 
+    font-size: 50px; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0px 8px 20px rgba(0,0,0,0.4);
+    pointer-events: none; 
+    z-index: 5; 
+}
+
+/* 7. CAPA DE SOMBREADO FIJO EN LAS ESQUINAS */
+body::after {
+    content: "";
+    position: fixed; 
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: radial-gradient(circle, rgba(0,0,0,0) 40%, rgba(0,0,0,0.7) 100%);
+    pointer-events: none; 
+    z-index: 999; 
+}
+
