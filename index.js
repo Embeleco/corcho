@@ -174,4 +174,84 @@ document.getElementById('btn-centro').addEventListener('click', (e) => {
             document.body.classList.remove('modo-colocar');
             btnCrear.style.backgroundColor = '#ffffff';
         }
+       
+
+let nombreUsuarioChat = ""; // Guardará el apodo del alumno
+let canalChat; // El canal en tiempo real
+
+// 1. CONTROL DE ABRIR/CERRAR CHAT
+const btnAbrirChat = document.getElementById('btn-abrir-chat');
+const btnCerrarChat = document.getElementById('btn-cerrar-chat');
+const ventanaChat = document.getElementById('ventana-chat');
+
+btnAbrirChat.addEventListener('click', (e) => {
+    e.stopPropagation();
+    
+    // LOGIN RÁPIDO: Si el usuario no tiene nombre todavía, se lo pedimos
+    if (!nombreUsuarioChat) {
+        const apodo = prompt("Introduce tu apodo o nombre para entrar al chat de la Uni:");
+        if (!apodo || apodo.trim() === "") return; // Si cancela, no abre el chat
+        nombreUsuarioChat = apodo.trim();
+    }
+    
+    ventanaChat.classList.remove('cerrado');
+});
+
+btnCerrarChat.addEventListener('click', () => {
+    ventanaChat.classList.add('cerrado');
+});
+
+
+// 2. SISTEMA EN TIEMPO REAL CON SUPABASE (BROADCAST)
+// Nos unimos a una sala de chat virtual llamada 'sala-campus'
+canalChat = supabase.channel('sala-campus');
+
+// Escuchamos cuando llegue un mensaje de otra persona en vivo
+canalChat.on('broadcast', { event: 'mensaje-nuevo' }, (payload) => {
+    pintarMensajeEnPantalla(payload.payload.usuario, payload.payload.texto);
+}).subscribe();
+
+
+// 3. ENVIAR UN MENSAJE AL PULSAR EL BOTÓN
+const inputMsg = document.getElementById('input-msg');
+const btnEnviarMsg = document.getElementById('btn-enviar-msg');
+
+function enviarMensaje() {
+    const texto = inputMsg.value.trim();
+    if (texto === "" || !nombreUsuarioChat) return;
+
+    // Emitimos el mensaje a internet para que le llegue a todos los que estén conectados
+    canalChat.send({
+        type: 'broadcast',
+        event: 'mensaje-nuevo',
+        payload: { usuario: nombreUsuarioChat, texto: texto }
+    });
+
+    // También lo pintamos en nuestra propia pantalla
+    pintarMensajeEnPantalla("Tú (" + nombreUsuarioChat + ")", texto);
+    inputMsg.value = ""; // Limpiamos el cuadro
+}
+
+btnEnviarMsg.addEventListener('click', enviarMensaje);
+inputMsg.addEventListener('keypress', (e) => { if (e.key === 'Enter') enviarMensaje(); });
+
+
+// 4. FUNCIÓN AUXILIAR PARA DIBUJAR LAS BURBUJAS DE TEXTO
+function pintarMensajeEnPantalla(usuario, texto) {
+    const contenedorMensajes = document.getElementById('chat-mensajes');
+    const burbuja = document.createElement('div');
+    burbuja.className = 'msg-burbuja';
+    
+    burbuja.innerHTML = `<strong>${usuario}</strong><p>${texto}</p>`;
+    contenedorMensajes.appendChild(burbuja);
+    
+    // Auto-scroll automático hacia abajo para leer el último mensaje
+    contenedorMensajes.scrollTop = contenedorMensajes.scrollHeight;
+}
+
+// Bloquear el arrastre del mapa si el usuario está interactuando con el chat
+window.addEventListener('mousedown', (e) => {
+    if (e.target.closest('#ventana-chat') || e.target.closest('.header-campus')) return;
+    // ... tu código de mousedown original de arrastrar el mapa ...
+});
 
