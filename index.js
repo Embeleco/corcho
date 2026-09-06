@@ -1,5 +1,5 @@
                 // Tamaño del lienzo del corcho
-        const SUPABASE_URL = 'https://supabase.co'; 
+        const SUPABASE_URL = 'https://pwisexqdcresgevbgkaz.supabase.co'; 
         const SUPABASE_ANON_KEY = 'sb_publishable_OgJFosGU24LRz3f6EBBDpw_mmAQBR9p'; 
         const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
         const ANCHO_CORCHO = 5000;
