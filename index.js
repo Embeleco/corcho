@@ -1,10 +1,8 @@
                 // Tamaño del lienzo del corcho
-        // const SUPABASE_URL = 'https://pwisexqdcresgevbgkaz.supabase.co'; 
-        // const SUPABASE_ANON_KEY = 'sb_publishable_OgJFosGU24LRz3f6EBBDpw_mmAQBR9p'; 
-        // const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+         // Tamaño del lienzo del corcho
         const ANCHO_CORCHO = 5000;
         const ALTO_CORCHO = 5000;
-        // const HORAS_DURACION = 48;
+
         // 1. Centrar la pantalla al cargar la página por primera vez
         window.onload = function() {
             const centroX = (ANCHO_CORCHO - window.innerWidth) / 2;
@@ -24,13 +22,12 @@ document.getElementById('btn-centro').addEventListener('click', (e) => {
     const destinoY = 2500 - (window.innerHeight / 2);
     
     // Forzamos el scroll al centro
-//     window.scrollTo({
-//         left: destinoX,
-//         top: destinoY,
-//         behavior: 'smooth' // Animación suave
-//     });
-// });
-
+    window.scrollTo({
+        left: destinoX,
+        top: destinoY,
+        behavior: 'smooth' // Animación suave
+    });
+});
 
         // 3. Sistema Pro de Arrastre con el Ratón (Fluido y sin trabarse)
         let isDown = false;
@@ -205,56 +202,56 @@ btnCerrarChat.addEventListener('click', () => {
 });
 
 
-// 2. SISTEMA EN TIEMPO REAL CON SUPABASE (BROADCAST)
-// Nos unimos a una sala de chat virtual llamada 'sala-campus'
-canalChat = supabase.channel('sala-campus');
+// // 2. SISTEMA EN TIEMPO REAL CON SUPABASE (BROADCAST)
+// // Nos unimos a una sala de chat virtual llamada 'sala-campus'
+// canalChat = supabase.channel('sala-campus');
 
-// Escuchamos cuando llegue un mensaje de otra persona en vivo
-canalChat.on('broadcast', { event: 'mensaje-nuevo' }, (payload) => {
-    pintarMensajeEnPantalla(payload.payload.usuario, payload.payload.texto);
-}).subscribe();
-
-
-// 3. ENVIAR UN MENSAJE AL PULSAR EL BOTÓN
-const inputMsg = document.getElementById('input-msg');
-const btnEnviarMsg = document.getElementById('btn-enviar-msg');
-
-function enviarMensaje() {
-    const texto = inputMsg.value.trim();
-    if (texto === "" || !nombreUsuarioChat) return;
-
-    // Emitimos el mensaje a internet para que le llegue a todos los que estén conectados
-    canalChat.send({
-        type: 'broadcast',
-        event: 'mensaje-nuevo',
-        payload: { usuario: nombreUsuarioChat, texto: texto }
-    });
-
-    // También lo pintamos en nuestra propia pantalla
-    pintarMensajeEnPantalla("Tú (" + nombreUsuarioChat + ")", texto);
-    inputMsg.value = ""; // Limpiamos el cuadro
-}
-
-btnEnviarMsg.addEventListener('click', enviarMensaje);
-inputMsg.addEventListener('keypress', (e) => { if (e.key === 'Enter') enviarMensaje(); });
+// // Escuchamos cuando llegue un mensaje de otra persona en vivo
+// canalChat.on('broadcast', { event: 'mensaje-nuevo' }, (payload) => {
+//     pintarMensajeEnPantalla(payload.payload.usuario, payload.payload.texto);
+// }).subscribe();
 
 
-// 4. FUNCIÓN AUXILIAR PARA DIBUJAR LAS BURBUJAS DE TEXTO
-function pintarMensajeEnPantalla(usuario, texto) {
-    const contenedorMensajes = document.getElementById('chat-mensajes');
-    const burbuja = document.createElement('div');
-    burbuja.className = 'msg-burbuja';
+// // 3. ENVIAR UN MENSAJE AL PULSAR EL BOTÓN
+// const inputMsg = document.getElementById('input-msg');
+// const btnEnviarMsg = document.getElementById('btn-enviar-msg');
+
+// function enviarMensaje() {
+//     const texto = inputMsg.value.trim();
+//     if (texto === "" || !nombreUsuarioChat) return;
+
+//     // Emitimos el mensaje a internet para que le llegue a todos los que estén conectados
+//     canalChat.send({
+//         type: 'broadcast',
+//         event: 'mensaje-nuevo',
+//         payload: { usuario: nombreUsuarioChat, texto: texto }
+//     });
+
+//     // También lo pintamos en nuestra propia pantalla
+//     pintarMensajeEnPantalla("Tú (" + nombreUsuarioChat + ")", texto);
+//     inputMsg.value = ""; // Limpiamos el cuadro
+// }
+
+// btnEnviarMsg.addEventListener('click', enviarMensaje);
+// inputMsg.addEventListener('keypress', (e) => { if (e.key === 'Enter') enviarMensaje(); });
+
+
+// // 4. FUNCIÓN AUXILIAR PARA DIBUJAR LAS BURBUJAS DE TEXTO
+// function pintarMensajeEnPantalla(usuario, texto) {
+//     const contenedorMensajes = document.getElementById('chat-mensajes');
+//     const burbuja = document.createElement('div');
+//     burbuja.className = 'msg-burbuja';
     
-    burbuja.innerHTML = `<strong>${usuario}</strong><p>${texto}</p>`;
-    contenedorMensajes.appendChild(burbuja);
+//     burbuja.innerHTML = `<strong>${usuario}</strong><p>${texto}</p>`;
+//     contenedorMensajes.appendChild(burbuja);
     
-    // Auto-scroll automático hacia abajo para leer el último mensaje
-    contenedorMensajes.scrollTop = contenedorMensajes.scrollHeight;
-}
+//     // Auto-scroll automático hacia abajo para leer el último mensaje
+//     contenedorMensajes.scrollTop = contenedorMensajes.scrollHeight;
+// }
 
-// Bloquear el arrastre del mapa si el usuario está interactuando con el chat
-window.addEventListener('mousedown', (e) => {
-    if (e.target.closest('#ventana-chat') || e.target.closest('.header-campus')) return;
-    // ... tu código de mousedown original de arrastrar el mapa ...
-});
+// // Bloquear el arrastre del mapa si el usuario está interactuando con el chat
+// window.addEventListener('mousedown', (e) => {
+//     if (e.target.closest('#ventana-chat') || e.target.closest('.header-campus')) return;
+//     // ... tu código de mousedown original de arrastrar el mapa ...
+// });
 
