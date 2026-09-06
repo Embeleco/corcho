@@ -8,7 +8,27 @@
     
 </head>
 <body>
+         <!-- 1. BARRA SUPERIOR (HEADER) -->
+    <header class="header-campus">
+        <div class="header-logo">📌 El Corcho UVigo</div>
+        <button id="btn-abrir-chat" class="btn-chat-toggle">💬 Abrir Chat</button>
+    </header>
 
+    <!-- 2. VENTANA DEL CHAT LATERAL -->
+    <div id="ventana-chat" class="chat-contenedor cerrado">
+        <div class="chat-header">
+            <h3>💬 Chat en Vivo</h3>
+            <button id="btn-cerrar-chat">✖</button>
+        </div>
+        <!-- Aquí se irán pintando los mensajes -->
+        <div id="chat-mensajes" class="chat-mensajes"></div>
+        <!-- Entrada de texto -->
+        <div class="chat-input-area">
+            <input type="text" id="input-msg" placeholder="Escribe un mensaje..." maxlength="100">
+            <button id="btn-enviar-msg">🚀</button>
+        </div>
+    </div>
+    
     <!-- Tablero gigante -->
     <div class="lienzo-corcho" id="corcho">
 
