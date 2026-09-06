@@ -1,16 +1,52 @@
                 // Tamaño del lienzo del corcho
-        const SUPABASE_URL = 'https://pwisexqdcresgevbgkaz.supabase.co/rest/v1/nota'; 
+        const SUPABASE_URL = 'https://supabase.co'; 
         const SUPABASE_ANON_KEY = 'sb_publishable_OgJFosGU24LRz3f6EBBDpw_mmAQBR9p'; 
         const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
         const ANCHO_CORCHO = 5000;
         const ALTO_CORCHO = 5000;
         const HORAS_DURACION = 48;
         // 1. Centrar la pantalla al cargar la página por primera vez
-        window.onload = function() {
-            const centroX = (ANCHO_CORCHO - window.innerWidth) / 2;
-            const centroY = (ALTO_CORCHO - window.innerHeight) / 2;
-            window.scrollTo(centroX, centroY);
-        };
+        // REEMPLAZA TU WINDOW.ONLOAD POR ESTE ASÍNCRONO
+window.onload = async function() {
+    // 1. Centramos el corcho al arrancar
+    const centroX = (ANCHO_CORCHO - window.innerWidth) / 2;
+    const centroY = (ALTO_CORCHO - window.innerHeight) / 2;
+    window.scrollTo(centroX, centroY);
+
+    // 2. Descargamos las notas reales de la base de datos de Supabase
+    const { data: notas, error } = await supabase.from('nota').select('*');
+    
+    if (error) {
+        console.error("Error al traer notas de la nube:", error);
+        return;
+    }
+
+    const AHORA = new Date();
+    const contenedorCorcho = document.getElementById('corcho');
+
+    // 3. Filtramos por tiempo (48h de caducidad) y las dibujamos
+    if (notas) {
+        notas.forEach(nota => {
+            const fechaNota = new Date(nota.created_at);
+            const diferenciaHoras = (AHORA - fechaNota) / (1000 * 60 * 60);
+
+            if (diferenciaHoras < HORAS_DURACION) {
+                const nuevoPostIt = document.createElement('div');
+                nuevoPostIt.className = 'post-it';
+                nuevoPostIt.style.left = `${nota.pos_x}px`;
+                nuevoPostIt.style.top = `${nota.pos_y}px`;
+                nuevoPostIt.style.backgroundColor = nota.color;
+
+                nuevoPostIt.innerHTML = `
+                    <p>${nota.texto}</p>
+                    <span class="autor">${nota.autor}</span>
+                `;
+                contenedorCorcho.appendChild(nuevoPostIt);
+            }
+        });
+    }
+};
+
 
 // Busca tu evento del botón de centrar y cámbialo por este:
 document.getElementById('btn-centro').addEventListener('click', (e) => {
@@ -101,6 +137,7 @@ document.getElementById('btn-centro').addEventListener('click', (e) => {
         });
 
         // Detectamos el clic en el lienzo para clavar la nota
+                // DETECTAMOS EL CLIC EN EL LIENZO PARA CLAVAR LA NOTA (VERSIÓN NUBE)
         lienzo.addEventListener('click', (e) => {
             // Si el modo creación no está activo, o si hacemos clic en un post-it existente, no hacemos nada
             if (!modoCreacionActivo || e.target.closest('.post-it')) return;
@@ -110,13 +147,68 @@ document.getElementById('btn-centro').addEventListener('click', (e) => {
             const posX = e.clientX - rect.left;
             const posY = e.clientY - rect.top;
 
-            // Pedimos los datos al usuario (Ventanas nativas del navegador, rápido y sin código extra)
+            // Pedimos los datos al usuario
             const textoNota = prompt("¿Qué quieres escribir en tu nota del Campus?");
             if (!textoNota || textoNota.trim() === "") {
-                // Si cancela o no escribe nada, desactivamos el modo y salimos
                 desactivarModoCreacion();
                 return;
             }
+
+            // 1. Bloqueo de enlaces/links (Evita porno, virus y spam)
+            const contieneLinks = /https?:\/\/|www\.|[\w-]+\.(com|net|org|es|edu|info|xyz|tk|online|site|sex|porn|xxx)/i.test(textoNota);
+            if (contieneLinks) {
+                alert("🚨 Por seguridad, no se permiten enlaces ni páginas web en el corcho.");
+                desactivarModoCreacion();
+                return; 
+            }
+
+            // 2. Lista negra de palabras prohibidas
+            const palabrasProhibidas = [
+                "porno", "porn", "xxx", "sexo", "fuck", "polla", "coño", 
+                "puta", "puto", "nazi", "maricon", "subnormal", "gilipollas"
+            ];
+            const textoEnMinusculas = textoNota.toLowerCase();
+            const contieneBarbaridades = palabrasProhibidas.some(palabra => textoEnMinusculas.includes(palabra));
+            if (contieneBarbaridades) {
+                alert("🛑 Tu nota contiene palabras no permitidas. Mantengamos el corcho limpio y buen rollo en el campus.");
+                desactivarModoCreacion();
+                return; 
+            }
+
+            // 3. Límite de caracteres
+            if (textoNota.length > 150) {
+                alert("📏 La nota es demasiado larga. El máximo son 150 caracteres.");
+                desactivarModoCreacion();
+                return;
+            }
+            
+            const autorNota = prompt("Tu usuario de Instagram o apodo (opcional):") || "Anónimo";
+
+            // Calculamos un color aleatorio pastel para el post-it
+            const coloresPastel = ['#fef5c1', '#ffccff', '#ccffff', '#ccffcc', '#ffebcd'];
+            const colorAleatorio = coloresPastel[Math.floor(Math.random() * coloresPastel.length)];
+
+            // MANDAMOS LA NOTA DIRECTA A TU BASE DE DATOS EN LA NUBE
+            guardarNotaEnNube(textoNota, autorNota, posX - 125, posY - 50, colorAleatorio);
+        });
+
+        // FUNCIÓN AUXILIAR ASÍNCRONA PARA EMPUJAR LOS DATOS A SUPABASE
+        async function guardarNotaEnNube(texto, autor, x, y, color) {
+            const apodoLimpio = autor.startsWith('@') || autor === 'Anónimo' ? autor : '@' + autor;
+
+            const { error } = await supabase.from('nota').insert([
+                { texto: texto, autor: apodoLimpio, pos_x: x, pos_y: y, color: color }
+            ]);
+
+            if (error) {
+                alert("🚨 Hubo un problema al guardar la nota en la nube, inténtalo de nuevo.");
+                console.error(error);
+            } else {
+                // Al guardarse correctamente en internet, recargamos la web para que se descargue en su sitio real
+                location.reload();
+            }
+        }
+
             // 1. Bloqueo de enlaces/links (Evita porno, virus y spam)
             const contieneLinks = /https?:\/\/|www\.|[\w-]+\.(com|net|org|es|edu|info|xyz|tk|online|site|sex|porn|xxx)/i.test(textoNota);
             if (contieneLinks) {
