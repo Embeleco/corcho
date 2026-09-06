@@ -6,47 +6,13 @@
         const ALTO_CORCHO = 5000;
         const HORAS_DURACION = 48;
         // 1. Centrar la pantalla al cargar la página por primera vez
-        // REEMPLAZA TU WINDOW.ONLOAD POR ESTE ASÍNCRONO
-window.onload = async function() {
-    // 1. Centramos el corcho al arrancar
-    const centroX = (ANCHO_CORCHO - window.innerWidth) / 2;
-    const centroY = (ALTO_CORCHO - window.innerHeight) / 2;
-    window.scrollTo(centroX, centroY);
+        window.onload = async function() {
+            const centroX = (ANCHO_CORCHO - window.innerWidth) / 2;
+            const centroY = (ALTO_CORCHO - window.innerHeight) / 2;
+            window.scrollTo(centroX, centroY);
+	    await cargarNotas();
 
-    // 2. Descargamos las notas reales de la base de datos de Supabase
-    const { data: notas, error } = await supabase.from('nota').select('*');
-    
-    if (error) {
-        console.error("Error al traer notas de la nube:", error);
-        return;
-    }
-
-    const AHORA = new Date();
-    const contenedorCorcho = document.getElementById('corcho');
-
-    // 3. Filtramos por tiempo (48h de caducidad) y las dibujamos
-    if (notas) {
-        notas.forEach(nota => {
-            const fechaNota = new Date(nota.created_at);
-            const diferenciaHoras = (AHORA - fechaNota) / (1000 * 60 * 60);
-
-            if (diferenciaHoras < HORAS_DURACION) {
-                const nuevoPostIt = document.createElement('div');
-                nuevoPostIt.className = 'post-it';
-                nuevoPostIt.style.left = `${nota.pos_x}px`;
-                nuevoPostIt.style.top = `${nota.pos_y}px`;
-                nuevoPostIt.style.backgroundColor = nota.color;
-
-                nuevoPostIt.innerHTML = `
-                    <p>${nota.texto}</p>
-                    <span class="autor">${nota.autor}</span>
-                `;
-                contenedorCorcho.appendChild(nuevoPostIt);
-            }
-        });
-    }
-};
-
+        };
 
 // Busca tu evento del botón de centrar y cámbialo por este:
 document.getElementById('btn-centro').addEventListener('click', (e) => {
@@ -59,6 +25,41 @@ document.getElementById('btn-centro').addEventListener('click', (e) => {
     const destinoX = 2500 - (window.innerWidth / 2);
     const destinoY = 2500 - (window.innerHeight / 2);
     
+async function cargarNotas() {
+    const { data: notas, error } = await supabase
+        .from('nota')
+        .select('*');
+
+    if (error) {
+        console.error('Error al cargar las notas:', error);
+        return;
+    }
+
+    const AHORA = new Date();
+    const contenedorCorcho = document.getElementById('corcho');
+
+    notas.forEach(nota => {
+        const fechaNota = new Date(nota.created_at);
+        const diferenciaHoras =
+            (AHORA - fechaNota) / (1000 * 60 * 60);
+
+        if (diferenciaHoras >= HORAS_DURACION) return;
+
+        const postIt = document.createElement('div');
+        postIt.className = 'post-it';
+
+        postIt.style.left = `${nota.pos_x}px`;
+        postIt.style.top = `${nota.pos_y}px`;
+        postIt.style.backgroundColor = nota.color;
+
+        postIt.innerHTML = `
+            <p>${nota.texto}</p>
+            <span class="autor">${nota.autor}</span>
+        `;
+
+        contenedorCorcho.appendChild(postIt);
+    });
+}
     // Forzamos el scroll al centro
     window.scrollTo({
         left: destinoX,
@@ -153,10 +154,6 @@ document.getElementById('btn-centro').addEventListener('click', (e) => {
                 desactivarModoCreacion();
                 return;
             }
-
-
-
-
             // 1. Bloqueo de enlaces/links (Evita porno, virus y spam)
             const contieneLinks = /https?:\/\/|www\.|[\w-]+\.(com|net|org|es|edu|info|xyz|tk|online|site|sex|porn|xxx)/i.test(textoNota);
             if (contieneLinks) {
@@ -204,7 +201,24 @@ document.getElementById('btn-centro').addEventListener('click', (e) => {
                 <p>${textoNota}</p>
                 <span class="autor">${autorNota.startsWith('@') ? autorNota : '@' + autorNota}</span>
             `;
+	    const { error } = await supabase
+    .from('nota')
+    .insert({
+        texto: textoNota,
+        autor: autorNota.startsWith('@')
+            ? autorNota
+            : '@' + autorNota,
+        pos_x: posX - 125,
+        pos_y: posY - 50,
+        color: colorAleatorio
+    });
 
+if (error) {
+    console.error('Error al guardar la nota:', error);
+    alert('No se pudo guardar la nota.');
+    desactivarModoCreacion();
+    return;
+}
             // Clavamos físicamente el nuevo post-it en el lienzo
             lienzo.appendChild(nuevoPostIt);
 
