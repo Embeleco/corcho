@@ -177,10 +177,6 @@
             z-index: 999; /* Se sitúa por encima del corcho */
         }
 
-/* ==========================================
-   💬 ESTILOS DEL CHAT GENERAL Y HEADER
-   ========================================== */
-
 /* Barra Superior Fija */
 .header-campus {
     position: fixed;
@@ -191,7 +187,7 @@
     background-color: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(5px);
     box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    z-index: 500;
+    z-index: 1001; /* Por encima del oscurecimiento */
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -214,24 +210,29 @@
 }
 .btn-chat-toggle:hover { background-color: #c0392b; }
 
-/* Contenedor del Chat Flotante Derecho */
+/* Contenedor del Chat Flotante IZQUIERDO */
 .chat-contenedor {
     position: fixed;
     top: 75px;
-    right: 20px;
+    left: 20px; /* CAMBIADO DE RIGHT A LEFT */
     width: 320px;
     height: calc(100vh - 110px);
     background-color: white;
     border-radius: 12px;
     box-shadow: 0 5px 20px rgba(0,0,0,0.2);
-    z-index: 1000;
+    
+    /* TRUCO MAESTRO: z-index superior al del sombreado (999) para que no se oscurezca */
+    z-index: 1002; 
+    
     display: flex;
     flex-direction: column;
     overflow: hidden;
     transition: transform 0.3s ease, opacity 0.3s ease;
 }
+
+/* Animación de salida hacia la izquierda */
 .chat-contenedor.cerrado {
-    transform: translateX(360px);
+    transform: translateX(-360px); /* Ahora se esconde hacia la izquierda */
     opacity: 0;
     pointer-events: none;
 }
