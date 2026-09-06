@@ -114,7 +114,33 @@ document.getElementById('btn-centro').addEventListener('click', (e) => {
                 desactivarModoCreacion();
                 return;
             }
-
+            // 1. Bloqueo de enlaces/links (Evita porno, virus y spam)
+            const contieneLinks = /https?:\/\/|www\.|[\w-]+\.(com|net|org|es|edu|info|xyz|tk|online|site|sex|porn|xxx)/i.test(textoNota);
+            if (contieneLinks) {
+            alert("🚨 Por seguridad, no se permiten enlaces ni páginas web en el corcho.");
+            desactivarModoCreacion();
+            return; // Frena el código y no crea la nota
+            }
+            // 2. Lista negra de palabras prohibidas (Amplíala con las que quieras)
+            const palabrasProhibidas = [
+            "porno", "porn", "xxx", "sexo", "fuck", "polla", "coño", 
+            "puta", "puto", "nazi", "maricon", "subnormal", "gilipollas"
+            ];
+            // Comprobamos si el texto tiene alguna palabra de la lista negra
+            const textoEnMinusculas = textoNota.toLowerCase();
+            const contieneBarbaridades = palabrasProhibidas.some(palabra => textoEnMinusculas.includes(palabra));
+            if (contieneBarbaridades) {
+            alert("🛑 Tu nota contiene palabras no permitidas. Mantengamos el corcho limpio y buen rollo en el campus.");
+            desactivarModoCreacion();
+            return; // Frena el código y no crea la nota
+            }
+            // 3. Límite de caracteres (Para que no pongan un texto gigante que rompa el post-it)
+            if (textoNota.length > 150) {
+            alert("📏 La nota es demasiado larga. El máximo son 150 caracteres.");
+            desactivarModoCreacion();
+            return;
+            }
+            
             const autorNota = prompt("Tu usuario de Instagram o apodo (opcional):") || "Anónimo";
 
             // Creamos la estructura del nuevo Post-it
