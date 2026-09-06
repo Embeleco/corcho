@@ -1,10 +1,10 @@
                 // Tamaño del lienzo del corcho
-        const SUPABASE_URL = 'https://pwisexqdcresgevbgkaz.supabase.co'; 
-        const SUPABASE_ANON_KEY = 'sb_publishable_OgJFosGU24LRz3f6EBBDpw_mmAQBR9p'; 
-        const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        // const SUPABASE_URL = 'https://pwisexqdcresgevbgkaz.supabase.co'; 
+        // const SUPABASE_ANON_KEY = 'sb_publishable_OgJFosGU24LRz3f6EBBDpw_mmAQBR9p'; 
+        // const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
         const ANCHO_CORCHO = 5000;
         const ALTO_CORCHO = 5000;
-        const HORAS_DURACION = 48;
+        // const HORAS_DURACION = 48;
         // 1. Centrar la pantalla al cargar la página por primera vez
         window.onload = function() {
             const centroX = (ANCHO_CORCHO - window.innerWidth) / 2;
