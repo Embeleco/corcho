@@ -24,12 +24,12 @@ document.getElementById('btn-centro').addEventListener('click', (e) => {
     const destinoY = 2500 - (window.innerHeight / 2);
     
     // Forzamos el scroll al centro
-    window.scrollTo({
-        left: destinoX,
-        top: destinoY,
-        behavior: 'smooth' // Animación suave
-    });
-});
+//     window.scrollTo({
+//         left: destinoX,
+//         top: destinoY,
+//         behavior: 'smooth' // Animación suave
+//     });
+// });
 
 
         // 3. Sistema Pro de Arrastre con el Ratón (Fluido y sin trabarse)
