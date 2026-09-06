@@ -35,13 +35,13 @@
 
 
         /* 3. EL LIENZO GIGANTE (El corcho) */
-        .lienzo-corcho {
+        /* .lienzo-corcho {
             width: 5000px;  
             height: 5000px; 
             background-image: url('tu-imagen-de-corcho.jpg'); 
             background-repeat: repeat;
             background-size: 500px; 
-            position: relative;
+            position: relative; */
             
             /* Evita que el navegador intente "arrastrar" la imagen de fondo */
             -webkit-user-drag: none;
