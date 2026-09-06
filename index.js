@@ -6,12 +6,10 @@
         const ALTO_CORCHO = 5000;
         const HORAS_DURACION = 48;
         // 1. Centrar la pantalla al cargar la página por primera vez
-        window.onload = async function() {
+        window.onload = function() {
             const centroX = (ANCHO_CORCHO - window.innerWidth) / 2;
             const centroY = (ALTO_CORCHO - window.innerHeight) / 2;
             window.scrollTo(centroX, centroY);
-	    await cargarNotas();
-
         };
 
 // Busca tu evento del botón de centrar y cámbialo por este:
@@ -25,41 +23,6 @@ document.getElementById('btn-centro').addEventListener('click', (e) => {
     const destinoX = 2500 - (window.innerWidth / 2);
     const destinoY = 2500 - (window.innerHeight / 2);
     
-async function cargarNotas() {
-    const { data: notas, error } = await supabase
-        .from('nota')
-        .select('*');
-
-    if (error) {
-        console.error('Error al cargar las notas:', error);
-        return;
-    }
-
-    const AHORA = new Date();
-    const contenedorCorcho = document.getElementById('corcho');
-
-    notas.forEach(nota => {
-        const fechaNota = new Date(nota.created_at);
-        const diferenciaHoras =
-            (AHORA - fechaNota) / (1000 * 60 * 60);
-
-        if (diferenciaHoras >= HORAS_DURACION) return;
-
-        const postIt = document.createElement('div');
-        postIt.className = 'post-it';
-
-        postIt.style.left = `${nota.pos_x}px`;
-        postIt.style.top = `${nota.pos_y}px`;
-        postIt.style.backgroundColor = nota.color;
-
-        postIt.innerHTML = `
-            <p>${nota.texto}</p>
-            <span class="autor">${nota.autor}</span>
-        `;
-
-        contenedorCorcho.appendChild(postIt);
-    });
-}
     // Forzamos el scroll al centro
     window.scrollTo({
         left: destinoX,
@@ -201,24 +164,7 @@ async function cargarNotas() {
                 <p>${textoNota}</p>
                 <span class="autor">${autorNota.startsWith('@') ? autorNota : '@' + autorNota}</span>
             `;
-	    const { error } = await supabase
-    .from('nota')
-    .insert({
-        texto: textoNota,
-        autor: autorNota.startsWith('@')
-            ? autorNota
-            : '@' + autorNota,
-        pos_x: posX - 125,
-        pos_y: posY - 50,
-        color: colorAleatorio
-    });
 
-if (error) {
-    console.error('Error al guardar la nota:', error);
-    alert('No se pudo guardar la nota.');
-    desactivarModoCreacion();
-    return;
-}
             // Clavamos físicamente el nuevo post-it en el lienzo
             lienzo.appendChild(nuevoPostIt);
 
